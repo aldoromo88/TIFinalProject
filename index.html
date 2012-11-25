@@ -6,7 +6,7 @@
     // on connection to server, ask for user's name with an anonymous callback
     socket.on('connect', function(){
         // call the server-side function 'adduser' and send one parameter (value of prompt)
-        socket.emit('adduser', prompt("¿Cuál es tu nombre?"));
+        socket.emit('adduser', prompt("What's your name?"));
     });
 
     // listener, whenever the server emits 'updatechat', this updates the chat body
@@ -43,11 +43,11 @@
 
 </script>
 <div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
-    <b>Usuarios</b>
+    <b>USERS</b>
     <div id="users"></div>
 </div>
 <div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
     <div id="conversation"></div>
     <input id="data" style="width:200px;" />
-    <input type="button" id="datasend" value="Enviar" />
+    <input type="button" id="datasend" value="send" />
 </div>
