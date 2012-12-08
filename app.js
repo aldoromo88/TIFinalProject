@@ -2,10 +2,20 @@
 
 var port = process.env.PORT || 3000;
 
-var app = require('express').createServer()
-var io = require('socket.io').listen(app);
+//var app = require('express').createServer()
+var express = require("express");
+var app = express()
+  , http = require('http')
+  , server = http.createServer(app)
+  , io = require('socket.io').listen(server);
 
-app.listen(port);
+server.listen(3000);
+//var io = require('socket.io').listen(app);
+
+//app.listen(port);
+
+
+
 
 // Heroku setting for long polling - assuming io is the Socket.IO server object
 io.configure(function () { 

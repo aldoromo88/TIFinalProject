@@ -1,53 +1,275 @@
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script>
+
     var socket = io.connect('http://localhost:3000');
+    var userCount = 0;
+
+    function GetUserNumber() {
+        if (userCount == 4) {
+            userCount = 1
+        }
+        else { userCount = userCount + 1; }
+        return userCount;
+    }
 
     // on connection to server, ask for user's name with an anonymous callback
-    socket.on('connect', function(){
+    socket.on('connect', function () {
         // call the server-side function 'adduser' and send one parameter (value of prompt)
         socket.emit('adduser', prompt("What's your name?"));
     });
 
     // listener, whenever the server emits 'updatechat', this updates the chat body
     socket.on('updatechat', function (username, data) {
-        $('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
+        $('#conversation').append('<div style=\"color: #000000;\" ' + 'id=\'user' + GetUserNumber() + '\'>' + username + ':</div> ' + '<div ' + 'class=\"triangle-right\"' + '>' + data + '</div>' + '<br>');
     });
 
     // listener, whenever the server emits 'updateusers', this updates the username list
-    socket.on('updateusers', function(data) {
+    socket.on('updateusers', function (data) {
         $('#users').empty();
-        $.each(data, function(key, value) {
+        $.each(data, function (key, value) {
             $('#users').append('<div>' + key + '</div>');
         });
     });
 
     // on load of page
-    $(function(){
+    $(function () {
         // when the client clicks SEND
-        $('#datasend').click( function() {
+        $('#datasend').click(function () {
             var message = $('#data').val();
             $('#data').val('');
             // tell server to execute 'sendchat' and send along one parameter
             socket.emit('sendchat', message);
+            $("#conversation").scrollTop($("#conversation")[0].scrollHeight);
         });
 
         // when the client hits ENTER on their keyboard
-        $('#data').keypress(function(e) {
-            if(e.which == 13) {
+        $('#data').keypress(function (e) {
+            if (e.which == 13) {
                 $(this).blur();
                 $('#datasend').focus().click();
             }
         });
+
+
     });
 
 </script>
-<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
-    <b>USERS</b>
-    <div id="users"></div>
-</div>
-<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
-    <div id="conversation"></div>
-    <input id="data" style="width:200px;" />
-    <input type="button" id="datasend" value="send" />
-</div>
+<style>
+    body
+    {
+        font: small/1.2 Arial, Helvetica, sans-serif;
+    }
+    
+    
+    #user1
+    {
+        background-color: #CCFF99;
+    }
+    #user2
+    {
+        background-color: #FF6633;
+    }
+    #user3
+    {
+        background-color: #FFCC00;
+    }
+    #user4
+    {
+        background-color: #99FFFF;
+    }
+    h1
+    {
+        font-size: 150%;
+        margin: 10px 10px .2em 25px;
+    }
+    p
+    {
+        margin: 1em 25px;
+    }
+    
+    input.shiny-blue
+    {
+        background-color: #759ae9;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #759ae9), color-stop(50%, #376fe0), color-stop(50%, #1a5ad9), color-stop(100%, #2463de));
+        background-image: -webkit-linear-gradient(top, #759ae9 0%, #376fe0 50%, #1a5ad9 50%, #2463de 100%);
+        background-image: -moz-linear-gradient(top, #759ae9 0%, #376fe0 50%, #1a5ad9 50%, #2463de 100%);
+        background-image: -ms-linear-gradient(top, #759ae9 0%, #376fe0 50%, #1a5ad9 50%, #2463de 100%);
+        background-image: -o-linear-gradient(top, #759ae9 0%, #376fe0 50%, #1a5ad9 50%, #2463de 100%);
+        background-image: linear-gradient(top, #759ae9 0%, #376fe0 50%, #1a5ad9 50%, #2463de 100%);
+        border-top: 1px solid #1f58cc;
+        border-right: 1px solid #1b4db3;
+        border-bottom: 1px solid #174299;
+        border-left: 1px solid #1b4db3;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 0 2px 0 rgba(57, 140, 255, 0.8);
+        box-shadow: inset 0 0 2px 0 rgba(57, 140, 255, 0.8);
+        color: #fff;
+        font: bold 12px/1 "helvetica neue" , helvetica, arial, sans-serif;
+        padding: 7px 0;
+        text-shadow: 0 -1px 1px #1a5ad9;
+        width: 50px;
+    }
+    button.shiny-blue:hover
+    {
+        background-color: #5d89e8;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5d89e8), color-stop(50%, #2261e0), color-stop(50%, #044bd9), color-stop(100%, #0d53de));
+        background-image: -webkit-linear-gradient(top, #5d89e8 0%, #2261e0 50%, #044bd9 50%, #0d53de 100%);
+        background-image: -moz-linear-gradient(top, #5d89e8 0%, #2261e0 50%, #044bd9 50%, #0d53de 100%);
+        background-image: -ms-linear-gradient(top, #5d89e8 0%, #2261e0 50%, #044bd9 50%, #0d53de 100%);
+        background-image: -o-linear-gradient(top, #5d89e8 0%, #2261e0 50%, #044bd9 50%, #0d53de 100%);
+        background-image: linear-gradient(top, #5d89e8 0%, #2261e0 50%, #044bd9 50%, #0d53de 100%);
+        cursor: pointer;
+    }
+    button.shiny-blue:active
+    {
+        border-top: 1px solid #1b4db3;
+        border-right: 1px solid #174299;
+        border-bottom: 1px solid #133780;
+        border-left: 1px solid #174299;
+        -webkit-box-shadow: inset 0 0 5px 2px #1a47a0, 0 1px 0 #eeeeee;
+        box-shadow: inset 0 0 5px 2px #1a47a0, 0 1px 0 #eeeeee;
+    }
+    
+    
+    div.triangle-right
+    {
+        position: relative;
+        padding: 15px;
+        margin: 1em 0 3em;
+        color: #fff;
+        background: #075698; /* default background for browsers without gradient support */ /* css3 */
+        background: -webkit-gradient(linear, 0 0, 0 100%, from(#2e88c4), to(#075698));
+        background: -moz-linear-gradient(#2e88c4, #075698);
+        background: -o-linear-gradient(#2e88c4, #075698);
+        background: linear-gradient(#2e88c4, #075698);
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+    }
+    
+    
+    /* creates triangle */
+    div.triangle-right:after
+    {
+        content: "";
+        position: absolute;
+        bottom: -20px; /* value = - border-top-width - border-bottom-width */
+        left: 50px; /* controls horizontal position */
+        border-width: 20px 0 0 20px; /* vary these values to change the angle of the vertex */
+        border-style: solid;
+        border-color: #075698 transparent; /* reduce the damage in FF3.0 */
+        display: block;
+        width: 0;
+    }
+    
+    
+    html
+    {
+        background: url('img/bg_tile.jpg') #161718;
+    }
+    
+    body
+    {
+        background: url('img/bg_center.jpg') no-repeat center center;
+        min-height: 600px;
+        padding: 200px 0 0;
+        font: 14px/1.3 'Segoe UI' ,Arial, sans-serif;
+        color: #888;
+    }
+    
+    section, footer
+    {
+        display: block;
+    }
+    footer
+    {
+        background-color: #111111;
+        bottom: 0;
+        box-shadow: 0 -1px 2px #111111;
+        height: 45px;
+        left: 0;
+        position: fixed;
+        width: 100%;
+        z-index: 100000;
+    }
+    
+    footer h2
+    {
+        color: #EEEEEE;
+        font-size: 14px;
+        font-weight: normal;
+        left: 50%;
+        margin-left: -400px;
+        padding: 13px 0 0;
+        position: absolute;
+        width: 540px;
+    }
+    
+    footer h2 i
+    {
+        font-style: normal;
+        color: #888;
+    }
+    
+    footer a.tzine, a.tzine:visited
+    {
+        color: #999999;
+        font-size: 12px;
+        left: 50%;
+        margin: 16px 0 0 110px;
+        position: absolute;
+        text-decoration: none;
+        top: 0;
+    }
+    
+    footer a i
+    {
+        color: #ccc;
+        font-style: normal;
+    }
+    
+    footer a i b
+    {
+        color: #c92020;
+        font-weight: normal;
+    }
+    
+    #formContainer
+    {
+        width: 450px;
+        height: 300px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        -moz-perspective: 800px;
+        -webkit-perspective: 800px;
+        perspective: 800px;
+    }
+</style>
+<body>    
+
+    <div id="formContainer" ">                
+        <div style="text-align:center;"><h1>SALA CHAT TECNOLOGIAS</h1></div>
+        <br />
+        <div style="float: left; width: 100px; border-right: 2px solid white; height: 300px;
+            padding: 10px; overflow: auto;">
+            <b>USERS</b>
+            <div id="users" style="color: #FFFFFF;">
+            </div>
+        </div>
+        <div>
+            <div id="conversation" style="float: none; width: 300px; height: 250px; padding: 5px;
+                overflow: scroll;">
+            </div>
+            <br />
+            Text:
+            <input id="data" style="width: 180px;" />
+            <input class="shiny-blue" type="button" id="datasend" value="send" />
+        </div>
+    </div>
+    <footer>
+        
+	  <h2>[Proyecto Final de Tecnologias] <i>Integrantes:</i> Lidia | Aldo | Chuy</h2>                         
+    </footer>
+</body>
