@@ -9,7 +9,7 @@ var app = express()
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
 
-server.listen(3000);
+server.listen(port);
 //var io = require('socket.io').listen(app);
 
 //app.listen(port);
